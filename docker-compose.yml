@@ -1,0 +1,8 @@
+services:
+  agent:
+    build: .
+    env_file: .env
+    volumes:
+      # Persist Pyrogram session files across restarts
+      - ./sessions:/app
+    restart: unless-stopped

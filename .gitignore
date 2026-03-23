@@ -1,0 +1,10 @@
+.env
+*.session
+*.session-journal
+__pycache__/
+*.pyc
+.pytest_cache/
+src/notion_db_cache.json
+dist/
+*.egg-info/
+.venv/
