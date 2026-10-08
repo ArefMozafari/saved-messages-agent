@@ -46,7 +46,7 @@ class MessagePayload:
             parts.append(f"File: {self.file_name}")
         if self.mime_type:
             parts.append(f"MIME type: {self.mime_type}")
-        parts.append(f"Message type: {self.message_type.value}")
+        # parts.append(f"Message type: {self.message_type.value}")
         return "\n".join(parts) if parts else "Empty message"
 
 
@@ -65,4 +65,5 @@ class ClassificationResult:
 
     payload: MessagePayload
     suggestions: list[CategorySuggestion]
+    strategy_used: str = "" # e.g., "Google Gemini", "xAI Grok", "Regex Fallback"
     ai_summary: str = ""    # short human-readable summary of the content

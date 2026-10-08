@@ -46,6 +46,12 @@ class Settings:
     # Notion
     notion_token: str
     notion_parent_page_id: str
+    
+    # Fallback AI Providers (Optional)
+    xai_api_key: Optional[str] = None
+    openai_api_key: Optional[str] = None
+    anthropic_api_key: Optional[str] = None
+    ollama_host: Optional[str] = None
     # Misc
     log_level: str = "INFO"
     categories: list[dict[str, str]] = field(default_factory=lambda: list(DEFAULT_CATEGORIES))
@@ -57,6 +63,10 @@ class Settings:
             telegram_api_hash=_require("TELEGRAM_API_HASH"),
             telegram_bot_token=_require("TELEGRAM_BOT_TOKEN"),
             gemini_api_key=_require("GEMINI_API_KEY"),
+            xai_api_key=os.getenv("XAI_API_KEY"),
+            openai_api_key=os.getenv("OPENAI_API_KEY"),
+            anthropic_api_key=os.getenv("ANTHROPIC_API_KEY"),
+            ollama_host=os.getenv("OLLAMA_HOST"),
             notion_token=_require("NOTION_TOKEN"),
             notion_parent_page_id=_require("NOTION_PARENT_PAGE_ID"),
             log_level=os.getenv("LOG_LEVEL", "INFO"),

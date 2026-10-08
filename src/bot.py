@@ -61,14 +61,17 @@ class CategoryUI:
             "selected": set(),
             "payload": payload,
             "ai_summary": result.ai_summary,
+            "suggestions": result.suggestions, 
         }
 
         # Build summary text
         summary = result.ai_summary or "(no summary)"
+        strategy = result.strategy_used or "Unknown"
         text = (
             f"📥 **New Saved Message** (#{msg_id})\n\n"
-            f"🤖 *{summary}*\n\n"
-            f"Select one or more categories:"
+            f"📝 *{summary}*\n"
+            f"🧠 Classified by: {strategy}\n\n"
+            f"Select a category to save:"
         )
 
         keyboard = self._build_keyboard(msg_id, result)
@@ -106,7 +109,7 @@ class CategoryUI:
             else:
                 selected.add(slug)
             # Rebuild keyboard
-            keyboard = self._build_selection_keyboard(msg_id, selected)
+            keyboard = self._build_selection_keyboard(msg_id, selected, pending.get("suggestions", []))
             await cb.message.edit_reply_markup(reply_markup=keyboard)
             cat = self._settings.category_by_slug(slug)
             label = cat["label"] if cat else slug
@@ -132,7 +135,12 @@ class CategoryUI:
             cat_labels = []
             for s in selected:
                 cat = self._settings.category_by_slug(s)
-                cat_labels.append(f"{cat['emoji']} {cat['label']}" if cat else s)
+                if cat:
+                    cat_labels.append(f"{cat['emoji']} {cat['label']}")
+                elif s.startswith("new_"):
+                    cat_labels.append(f"✨ {s[4:].title()}")
+                else:
+                    cat_labels.append(s)
 
             await cb.message.edit_text(
                 f"✅ **Saved to Notion!**\n\n"
@@ -163,8 +171,14 @@ class CategoryUI:
         row: list[InlineKeyboardButton] = []
         for suggestion in result.suggestions:
             cat = self._settings.category_by_slug(suggestion.category)
+            
             if not cat:
-                continue
+                if suggestion.category.startswith("new_"):
+                    # Dynamic category creation!
+                    cat = {"slug": suggestion.category, "emoji": "✨", "label": f"New: {suggestion.category[4:].title()}"}
+                else:
+                    continue
+                    
             label = f"⭐ {cat['emoji']} {cat['label']}"
             row.append(InlineKeyboardButton(
                 text=label,
@@ -204,12 +218,23 @@ class CategoryUI:
         self,
         msg_id: int,
         selected: set[str],
+        suggestions: list,
     ) -> InlineKeyboardMarkup:
-        """Rebuild keyboard reflecting current selection state."""
+        """Rebuild keyboard reflecting current selection state, protecting dynamic models."""
         rows: list[list[InlineKeyboardButton]] = []
         row: list[InlineKeyboardButton] = []
 
-        for cat in self._settings.categories:
+        # Gather standard options and inject any dynamic ones that were offered
+        all_options = list(self._settings.categories)
+        dynamic_slugs = {c["slug"] for c in all_options}
+
+        for suggestion in suggestions:
+            slug = suggestion.category
+            if slug not in dynamic_slugs and slug.startswith("new_"):
+                all_options.insert(0, {"slug": slug, "emoji": "✨", "label": f"New: {slug[4:].title()}"})
+                dynamic_slugs.add(slug)
+
+        for cat in all_options:
             check = "✅" if cat["slug"] in selected else "⬜"
             label = f"{check} {cat['emoji']} {cat['label']}"
             row.append(InlineKeyboardButton(
