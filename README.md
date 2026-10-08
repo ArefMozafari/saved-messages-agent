@@ -110,3 +110,7 @@ docker compose logs -f agent
 
 - `/start` — welcome message
 - `/categories` — list all available categories
+
+## License
+
+MIT — see [LICENSE](LICENSE).
