@@ -1,6 +1,21 @@
-# 📥 Saved Messages Agent
+<p align="center">
+  <img src="assets/icons/telegram.svg" width="36" alt="Telegram">
+  &nbsp;&nbsp;&nbsp;➜&nbsp;&nbsp;&nbsp;
+  <img src="assets/icons/googlegemini.svg" width="36" alt="Gemini">
+  &nbsp;&nbsp;&nbsp;➜&nbsp;&nbsp;&nbsp;
+  <picture><source media="(prefers-color-scheme: dark)" srcset="assets/icons/notion-white.svg"><img src="assets/icons/notion.svg" width="36" alt="Notion"></picture>
+</p>
 
-**Telegram Saved Messages → AI Categorizer → Notion**
+<h1 align="center">Saved Messages Agent</h1>
+
+<p align="center"><b>Telegram Saved Messages → AI categorizer → Notion</b></p>
+
+<p align="center">
+  <a href="https://github.com/ArefMozafari/saved-messages-agent/releases/latest"><img src="https://img.shields.io/github/v/release/ArefMozafari/saved-messages-agent?color=orange" alt="Release"></a>
+  <img src="https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white" alt="python 3.11+">
+  <img src="https://img.shields.io/badge/docker-ready-2496ED?logo=docker&logoColor=white" alt="docker ready">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+</p>
 
 An intelligent agent that watches your Telegram Saved Messages, classifies each message using Google Gemini AI, lets you pick categories via inline buttons, and saves everything to organized Notion databases.
 
