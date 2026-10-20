@@ -1,6 +1,6 @@
 [project]
 name = "saved-messages-agent"
-version = "0.1.0"
+version = "1.0.0"
 description = "Telegram Saved Messages → AI Categorizer → Notion Agent"
 requires-python = ">=3.11"
 dependencies = [
